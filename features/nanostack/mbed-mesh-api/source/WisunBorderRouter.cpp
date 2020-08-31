@@ -186,3 +186,20 @@ int WisunBorderRouter::routing_table_get(ws_br_route_info_t *table_ptr, uint16_t
 
     return ws_bbr_routing_table_get(_mesh_if_id, (bbr_route_info_t *)table_ptr, table_len);
 }
+
+mesh_error_t WisunBorderRouter::set_dns_query_result(SocketAddress *address, char *domain_name)
+{
+    if (!domain_name || !address) {
+        return MESH_ERROR_PARAM;
+    }
+
+    if (_mesh_if_id < 0) {
+        return MESH_ERROR_STATE;
+    }
+
+    if (ws_bbr_dns_query_result_set(_mesh_if_id, (const uint8_t *)address->get_ip_bytes(), domain_name) >= 0 ) {
+        return MESH_ERROR_NONE;
+    }
+
+    return MESH_ERROR_UNKNOWN;
+}
