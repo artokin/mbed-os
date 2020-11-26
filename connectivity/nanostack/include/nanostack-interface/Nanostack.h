@@ -43,7 +43,10 @@ public:
     nsapi_error_t add_ethernet_interface(EMAC &emac, bool default_if, OnboardNetworkStack::Interface **interface_out) override;
     nsapi_error_t add_ethernet_interface(EMAC &emac, bool default_if, OnboardNetworkStack::Interface **interface_out, const uint8_t *mac_addr) override;
 
-    nsapi_error_t add_ppp_interface(PPP &ppp, bool default_if, OnboardNetworkStack::Interface **interface_out) override;
+    /* Local variant with stronger typing and manual address specification */
+    nsapi_error_t add_ethernet_interface(EMAC &emac, bool default_if, Nanostack::EthernetInterface **interface_out, const uint8_t *mac_addr = NULL);
+
+    virtual nsapi_error_t add_ppp_interface(PPP &ppp, bool default_if, OnboardNetworkStack::Interface **interface_out);
 
     /* Local variant with stronger typing and manual address specification */
     nsapi_error_t add_ppp_interface(PPP &ppp, bool default_if, Nanostack::PPPInterface **interface_out);
@@ -105,6 +108,7 @@ protected:
      *
      *  @param index    Index of the DNS server, starts from zero
      *  @param address  Destination for the host address
+     *  @param interface_name Network interface name
      *  @return         0 on success, negative error code on failure
      */
     virtual nsapi_error_t get_dns_server(int index, SocketAddress *address, const char *interface_name);
